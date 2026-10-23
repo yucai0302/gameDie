@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DiePlay · 阵亡即娱乐 | 创意展示</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ========== 设计令牌 ========== */
+      :root {
+        --ink-900: #0a0a0f;
+        --ink-800: #101018;
+        --ink-700: #15151c;
+        --ink-600: #1e1e2a;
+        --ink-500: #2a2a38;
+        --flame: #ff4d2e;
+        --flame-soft: #ff7a52;
+        --flame-deep: #cc3d24;
+        --cyan-neon: #00e5ff;
+        --lime-neon: #7cff6b;
+        --mist-100: #f5f5f7;
+        --mist-200: #c8c8d2;
+        --mist-300: #8b8b9a;
+        --mist-400: #5a5a6a;
+        --font-display: "Space Grotesk", "PingFang SC", "Noto Sans SC", sans-serif;
+        --font-sans: "Noto Sans SC", "PingFang SC", "Space Grotesk", sans-serif;
+        --font-mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        background: var(--ink-900);
+        color: var(--mist-100);
+        font-family: var(--font-sans);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+
+      body {
+        background:
+          radial-gradient(circle at 15% 15%, rgba(255, 77, 46, 0.12), transparent 40%),
+          radial-gradient(circle at 85% 75%, rgba(0, 229, 255, 0.08), transparent 45%),
+          var(--ink-900);
+        background-attachment: fixed;
+      }
+
+      ::selection {
+        background: rgba(255, 77, 46, 0.3);
+        color: #fff;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+      }
+
+      /* ========== 通用容器 ========== */
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+
+      .glass {
+        background: rgba(21, 21, 28, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 16px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--flame-soft);
+        padding: 6px 12px;
+        border: 1px solid rgba(255, 77, 46, 0.3);
+        border-radius: 999px;
+        background: rgba(255, 77, 46, 0.06);
+      }
+      .eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--flame);
+        box-shadow: 0 0 8px var(--flame);
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+
+      /* ========== HERO ========== */
+      .hero {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        padding: 120px 0 80px;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 20% 50%, rgba(255, 77, 46, 0.15), transparent 50%),
+          radial-gradient(circle at 80% 50%, rgba(0, 229, 255, 0.1), transparent 50%);
+        pointer-events: none;
+      }
+
+      .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 980px;
+      }
+
+      .hero h1 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(56px, 11vw, 132px);
+        line-height: 0.95;
+        letter-spacing: -0.04em;
+        margin: 24px 0 16px;
+        background: linear-gradient(135deg, #fff 0%, #fff 40%, var(--flame) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero h1 .accent {
+        background: linear-gradient(135deg, var(--flame) 0%, var(--flame-deep) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 60px rgba(255, 77, 46, 0.4);
+      }
+
+      .hero .tagline {
+        font-family: var(--font-display);
+        font-size: clamp(18px, 2.4vw, 26px);
+        font-weight: 500;
+        color: var(--mist-200);
+        max-width: 680px;
+        margin-bottom: 8px;
+      }
+      .hero .tagline .neon {
+        color: var(--cyan-neon);
+        text-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+      }
+
+      .hero .lead {
+        font-size: 15px;
+        color: var(--mist-300);
+        max-width: 620px;
+        margin-top: 24px;
+        line-height: 1.8;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-top: 48px;
+        max-width: 760px;
+      }
+      .stat {
+        padding: 18px;
+      }
+      .stat .num {
+        font-family: var(--font-mono);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--mist-100);
+        line-height: 1;
+      }
+      .stat .num.flame { color: var(--flame); }
+      .stat .num.cyan { color: var(--cyan-neon); }
+      .stat .num.lime { color: var(--lime-neon); }
+      .stat .label {
+        margin-top: 8px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--mist-300);
+      }
+
+      .scroll-hint {
+        position: absolute;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-mono);
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--mist-400);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+      .scroll-hint::after {
+        content: "";
+        width: 1px;
+        height: 24px;
+        background: linear-gradient(to bottom, var(--mist-400), transparent);
+        animation: scrollLine 1.8s ease-in-out infinite;
+      }
+      @keyframes scrollLine {
+        0%, 100% { transform: scaleY(1); opacity: 0.6; }
+        50% { transform: scaleY(0.4); opacity: 1; }
+      }
+
+      /* ========== 章节通用 ========== */
+      section {
+        padding: 100px 0;
+        position: relative;
+      }
+
+      .section-head {
+        margin-bottom: 48px;
+        max-width: 760px;
+      }
+      .section-head .num {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--flame);
+        letter-spacing: 0.2em;
+      }
+      .section-head h2 {
+        font-family: var(--font-display);
+        font-size: clamp(32px, 5vw, 52px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        margin-top: 12px;
+        line-height: 1.1;
+      }
+      .section-head .desc {
+        margin-top: 16px;
+        color: var(--mist-300);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      /* ========== 创意介绍 ========== */
+      .intro-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .intro-card {
+        padding: 32px;
+        position: relative;
+        overflow: hidden;
+      }
+      .intro-card .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+      .intro-card .icon.flame {
+        background: rgba(255, 77, 46, 0.12);
+        border: 1px solid rgba(255, 77, 46, 0.25);
+        color: var(--flame);
+        box-shadow: 0 0 24px rgba(255, 77, 46, 0.15);
+      }
+      .intro-card .icon.cyan {
+        background: rgba(0, 229, 255, 0.1);
+        border: 1px solid rgba(0, 229, 255, 0.25);
+        color: var(--cyan-neon);
+        box-shadow: 0 0 24px rgba(0, 229, 255, 0.15);
+      }
+      .intro-card .icon.lime {
+        background: rgba(124, 255, 107, 0.1);
+        border: 1px solid rgba(124, 255, 107, 0.25);
+        color: var(--lime-neon);
+      }
+      .intro-card h3 {
+        font-family: var(--font-display);
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        color: var(--mist-300);
+        margin-bottom: 12px;
+      }
+      .intro-card p {
+        font-size: 15px;
+        color: var(--mist-100);
+        line-height: 1.75;
+      }
+      .intro-card p .hl {
+        color: var(--flame-soft);
+        font-weight: 500;
+      }
+
+      /* ========== 目标用户 ========== */
+      .user-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 32px;
+        align-items: stretch;
+      }
+      .persona {
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .persona .avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--flame), var(--flame-deep));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+        box-shadow: 0 0 32px rgba(255, 77, 46, 0.4);
+      }
+      .persona .name {
+        font-family: var(--font-display);
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .persona .meta {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--mist-300);
+        margin-top: 6px;
+        letter-spacing: 0.05em;
+      }
+      .persona .quote {
+        margin-top: 24px;
+        padding: 20px;
+        border-left: 2px solid var(--flame);
+        background: rgba(255, 77, 46, 0.04);
+        font-size: 16px;
+        color: var(--mist-200);
+        font-style: italic;
+        line-height: 1.7;
+      }
+
+      .pain-list {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+      }
+      .pain-item {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .pain-item .idx {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--flame);
+        padding-top: 4px;
+        flex-shrink: 0;
+        width: 28px;
+      }
+      .pain-item .body h4 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--mist-100);
+        margin-bottom: 6px;
+      }
+      .pain-item .body p {
+        font-size: 14px;
+        color: var(--mist-300);
+        line-height: 1.65;
+      }
+
+      /* ========== 价值 ========== */
+      .value-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+      .value-card {
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+      }
+      .value-card .tag {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--cyan-neon);
+        margin-bottom: 16px;
+      }
+      .value-card.alt .tag {
+        color: var(--lime-neon);
+      }
+      .value-card h3 {
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 16px;
+        letter-spacing: -0.01em;
+      }
+      .value-card p {
+        font-size: 14.5px;
+        color: var(--mist-200);
+        line-height: 1.8;
+      }
+      .value-card .highlight {
+        font-family: var(--font-mono);
+        color: var(--flame-soft);
+        font-weight: 600;
+      }
+      .value-card .glow-orb {
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.4;
+      }
+      .value-card .glow-orb.flame { background: var(--flame); }
+      .value-card .glow-orb.lime { background: var(--lime-neon); }
+
+      /* ========== 架构 ========== */
+      .arch {
+        padding: 40px;
+      }
+      .arch-flow {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        gap: 16px;
+        align-items: stretch;
+        margin-top: 24px;
+      }
+      .arch-node {
+        padding: 24px;
+        text-align: center;
+        border-radius: 12px;
+        background: rgba(10, 10, 15, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 140px;
+      }
+      .arch-node.game { border-color: rgba(124, 255, 107, 0.3); }
+      .arch-node.agent { border-color: rgba(255, 77, 46, 0.3); }
+      .arch-node.be { border-color: rgba(0, 229, 255, 0.3); }
+      .arch-node .emoji {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      .arch-node .title {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--mist-100);
+      }
+      .arch-node .sub {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--mist-300);
+        margin-top: 4px;
+        letter-spacing: 0.05em;
+      }
+      .arch-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-mono);
+        color: var(--mist-400);
+        font-size: 20px;
+      }
+
+      /* ========== 场景时间线 ========== */
+      .timeline {
+        padding: 40px;
+      }
+      .tl-list {
+        position: relative;
+        margin-top: 32px;
+        padding-left: 32px;
+      }
+      .tl-list::before {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        background: linear-gradient(to bottom, var(--flame) 0%, var(--flame) 50%, transparent 100%);
+      }
+      .tl-item {
+        position: relative;
+        padding: 12px 0 24px 24px;
+      }
+      .tl-item::before {
+        content: "";
+        position: absolute;
+        left: -28px;
+        top: 18px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--ink-900);
+        border: 2px solid var(--flame);
+        box-shadow: 0 0 12px var(--flame);
+      }
+      .tl-item .time {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--flame);
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+      }
+      .tl-item .text {
+        font-size: 15px;
+        color: var(--mist-100);
+        line-height: 1.65;
+      }
+      .tl-item .text .em {
+        color: var(--cyan-neon);
+      }
+
+      /* ========== Footer ========== */
+      footer {
+        padding: 60px 0 40px;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        text-align: center;
+      }
+      footer .logo {
+        font-family: var(--font-display);
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        margin-bottom: 12px;
+      }
+      footer .logo .flame { color: var(--flame); }
+      footer .meta {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--mist-400);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+
+      /* ========== 响应式 ========== */
+      @media (max-width: 900px) {
+        .hero-stats { grid-template-columns: repeat(2, 1fr); }
+        .intro-grid { grid-template-columns: 1fr; }
+        .user-layout { grid-template-columns: 1fr; }
+        .value-grid { grid-template-columns: 1fr; }
+        .arch-flow {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .arch-arrow {
+          transform: rotate(90deg);
+        }
+      }
+
+      /* ========== 入场动画 ========== */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============== HERO ============== -->
+    <header class="hero">
+      <div class="hero-grid"></div>
+      <div class="wrap hero-content">
+        <span class="eyebrow"><span class="dot"></span>CREATIVE SUBMISSION · 2026</span>
+        <h1>
+          DiePlay<br />
+          <span class="accent">阵亡即娱乐</span>
+        </h1>
+        <p class="tagline">
+          把"失败瞬间"<span class="neon">反转</span>成"奖励窗口"
+        </p>
+        <p class="lead">
+          一款运行在玩家 PC 上的本地化轻量系统。当玩家在 CSGO / PUBG / Apex / 守望先锋中阵亡的瞬间，
+          自动打开浏览器跳转到预设视频网站——用一次死亡，换一段娱乐。
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat glass">
+            <div class="num flame">15-25<span style="font-size:18px">%</span></div>
+            <div class="label">死亡时间占比</div>
+          </div>
+          <div class="stat glass">
+            <div class="num cyan">&lt; 1<span style="font-size:18px">s</span></div>
+            <div class="label">死亡识别延迟</div>
+          </div>
+          <div class="stat glass">
+            <div class="num lime">48<span style="font-size:18px">h</span></div>
+            <div class="label">年累计回收时长</div>
+          </div>
+          <div class="stat glass">
+            <div class="num">4+</div>
+            <div class="label">支持游戏</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">SCROLL · 向下滚动</div>
+    </header>
+
+    <!-- ============== 1. 创意介绍 ============== -->
+    <section id="intro">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">01 / 创意介绍</span>
+          <h2>把死亡变成<br />一次温柔的奖励</h2>
+          <p class="desc">
+            在竞技射击游戏中，玩家每局会阵亡 5–15 次，等待复活累计占游戏总时长的 15–25%。
+            这段"死亡真空期"目前完全被浪费。DiePlay 把它转化为可量化的娱乐时间。
+          </p>
+        </div>
+
+        <div class="intro-grid">
+          <div class="intro-card glass reveal">
+            <div class="icon flame">🎯</div>
+            <h3>痛点 · PAIN POINT</h3>
+            <p>
+              在 CSGO / PUBG / Apex / 守望先锋等竞技射击游戏中，玩家平均每局死亡 <span class="hl">5–15 次</span>，
+              每次需等待 5–40 秒才能复活，累计占游戏总时长的 <span class="hl">15%–25%</span>，
+              这段"死亡真空期"目前完全被浪费——玩家只能盯着死亡回放或倒计时发呆。
+            </p>
+          </div>
+          <div class="intro-card glass reveal">
+            <div class="icon cyan">💡</div>
+            <h3>动机 · INSPIRATION</h3>
+            <p>
+              灵感来自一次真实的尴尬体验——在 CSGO 一局中被连杀 8 次后，
+              无聊到反复切屏刷抖音，结果错过复活被队友骂。突然意识到：
+              <span class="hl">"死亡时刻"其实是玩家情绪最低落、最需要转移注意力的瞬间</span>，
+              而这个瞬间完全可以被设计成一个"自动奖励窗口"。
+            </p>
+          </div>
+          <div class="intro-card glass reveal">
+            <div class="icon lime">⚙️</div>
+            <h3>产品 · PRODUCT</h3>
+            <p>
+              一款运行在玩家 PC 上的<span class="hl">本地化轻量系统</span>
+              （桌面 Agent + 本地服务 + Web 看板），
+              无需联网云端、无需登录、开箱即用。
+              通过解析游戏日志/控制台精准识别死亡事件，
+              在阵亡瞬间自动打开默认浏览器跳转到玩家预设的视频网站。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== 2. 目标用户及痛点 ============== -->
+    <section id="users">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">02 / 目标用户及痛点</span>
+          <h2>谁会用它<br />什么时候用</h2>
+        </div>
+
+        <div class="user-layout">
+          <div class="persona glass reveal">
+            <div class="avatar">🎮</div>
+            <div class="name">硬核 PC 射击玩家</div>
+            <div class="meta">18-32 岁 · 每周 ≥10h · 双开重度用户</div>
+            <div class="quote">
+              "刚被对面 AWPer 一枪爆头，正烦躁呢，
+              浏览器自动弹出了我昨天没看完的 B 站视频——
+              那一瞬间，挫败感竟然变成了'哦又解锁了一段视频'。"
+            </div>
+          </div>
+
+          <div class="pain-list glass reveal">
+            <div class="pain-item">
+              <div class="idx">01</div>
+              <div class="body">
+                <h4>碎片化等待，注意力频繁切换</h4>
+                <p>玩家手动切屏找视频，等复活又要切回来，注意力反复横跳极耗精力，影响下一局专注度。</p>
+              </div>
+            </div>
+            <div class="pain-item">
+              <div class="idx">02</div>
+              <div class="body">
+                <h4>死亡体验是纯负面情绪</h4>
+                <p>连杀带来的挫败感无法被即时消解，心态崩溃后操作变形，形成"死亡-烦躁-再死"恶性循环。</p>
+              </div>
+            </div>
+            <div class="pain-item">
+              <div class="idx">03</div>
+              <div class="body">
+                <h4>"我在游戏里浪费了多少时间"完全不可见</h4>
+                <p>玩家无法量化自己的死亡时长，也就无法把这部分时间 reclaim 回来，更谈不上自我管理。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== 3. 价值与意义 ============== -->
+    <section id="value">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">03 / 价值与意义</span>
+          <h2>一次温柔的<br />效率与情绪双重回收</h2>
+        </div>
+
+        <div class="value-grid">
+          <div class="value-card glass reveal">
+            <div class="glow-orb flame"></div>
+            <div class="tag">VALUE 01 · 效率提升</div>
+            <h3>把被浪费的"死亡时间"<br />量化并回收</h3>
+            <p>
+              根据公开数据，CSGO 玩家平均一局死亡约 12 次，每次复活等待 8 秒，
+              按每天 5 局计算，单日损失约 8 分钟，年累计约 <span class="highlight">48 小时</span>
+              ——相当于整整两天纯娱乐时间被白扔。
+              <br /><br />
+              DiePlay 通过精准的事件识别 + 自动化的娱乐分发，
+              把这段"零收益时间"转化为高质量娱乐时间，
+              <span class="highlight">等效于给玩家每年"赠送"2 天假期</span>。
+              同时数据看板让原本不可见的死亡时长可视化，
+              帮助玩家建立健康游戏意识——
+              "原来我今天死了 47 次，刷了 1 小时视频，该休息了"。
+            </p>
+          </div>
+
+          <div class="value-card glass alt reveal">
+            <div class="glow-orb lime"></div>
+            <div class="tag">VALUE 02 · 社会价值</div>
+            <h3>重新定义"游戏失败"<br />的情绪价值</h3>
+            <p>
+              传统游戏设计中，死亡是惩罚机制，玩家情绪曲线在死亡瞬间跌入谷底。
+              DiePlay 用一个极其轻巧的<span class="highlight">"反转设计"</span>，
+              把死亡瞬间变成"奖励触发器"——你越死，越能刷到更多视频。
+              <br /><br />
+              这种<span class="highlight">情绪反转机制</span>对竞技焦虑玩家、
+              连败心态崩溃玩家尤其有价值，
+              能有效缓解游戏带来的负面情绪外溢（如摔鼠标、骂队友）。
+              <br /><br />
+              更深层的意义在于：它示范了一种
+              "用软件温柔地介入高强度竞技场景"的产品范式——
+              不改变游戏本身，只在游戏之外的边界缝隙里悄悄做一点情绪关怀。
+              这种"缝隙产品"思路可迁移到加班提醒、久坐干预、焦虑缓冲等更广泛场景。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== 4. 产品架构 ============== -->
+    <section id="arch">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">04 / 产品架构</span>
+          <h2>三端协同<br />毫秒级响应</h2>
+          <p class="desc">
+            桌面 Agent 负责游戏进程检测与日志解析，本地后端提供 REST API + WebSocket 实时推送，
+            Web 看板支持配置与数据可视化。全链路本地运行，零云端依赖。
+          </p>
+        </div>
+
+        <div class="arch glass reveal">
+          <div class="arch-flow">
+            <div class="arch-node game">
+              <div class="emoji">🎯</div>
+              <div class="title">游戏进程</div>
+              <div class="sub">CSGO · PUBG · Apex · OW</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node agent">
+              <div class="emoji">🤖</div>
+              <div class="title">桌面 Agent</div>
+              <div class="sub">psutil + 日志解析</div>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-node be">
+              <div class="emoji">⚙️</div>
+              <div class="title">本地后端</div>
+              <div class="sub">FastAPI + SQLite + WS</div>
+            </div>
+          </div>
+          <div class="arch-flow" style="margin-top: 16px;">
+            <div class="arch-node" style="border-color: rgba(255, 184, 46, 0.3);">
+              <div class="emoji">🌐</div>
+              <div class="title">默认浏览器</div>
+              <div class="sub">抖音 · B站 · YouTube</div>
+            </div>
+            <div class="arch-arrow">←</div>
+            <div class="arch-node agent">
+              <div class="emoji">🤖</div>
+              <div class="title">Agent 触发</div>
+              <div class="sub">webbrowser.open</div>
+            </div>
+            <div class="arch-arrow">←</div>
+            <div class="arch-node be">
+              <div class="emoji">📊</div>
+              <div class="title">Web 看板</div>
+              <div class="sub">React + Recharts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== 5. 使用场景时间线 ============== -->
+    <section id="timeline">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="num">05 / 使用场景</span>
+          <h2>一次完整的<br />"死亡奖励"流程</h2>
+        </div>
+
+        <div class="timeline glass reveal">
+          <div class="tl-list">
+            <div class="tl-item">
+              <div class="time">T+0.0s</div>
+              <div class="text">玩家在 CSGO 中被敌人击杀，游戏控制台输出死亡日志</div>
+            </div>
+            <div class="tl-item">
+              <div class="time">T+0.3s</div>
+              <div class="text">桌面 Agent 通过日志 tail 实时捕获死亡事件，调用后端 <span class="em">POST /api/death</span> 上报</div>
+            </div>
+            <div class="tl-item">
+              <div class="time">T+0.5s</div>
+              <div class="text">后端广播 WebSocket 事件，看板顶部状态条点亮，<span class="em">概览卡片数字 +1</span> 并滚动动画</div>
+            </div>
+            <div class="tl-item">
+              <div class="time">T+0.6s</div>
+              <div class="text">Agent 调用 <span class="em">webbrowser.open(redirect_url)</span>，默认浏览器打开新标签页跳转抖音</div>
+            </div>
+            <div class="tl-item">
+              <div class="time">T+0.7s</div>
+              <div class="text">玩家无感切换到刷视频状态，<span class="em">挫败感被即时娱乐消解</span></div>
+            </div>
+            <div class="tl-item">
+              <div class="time">T+8~40s</div>
+              <div class="text">玩家复活 / 下一局开始，继续游戏（视频仍在后台播放）</div>
+            </div>
+            <div class="tl-item">
+              <div class="time">赛后</div>
+              <div class="text">玩家打开本地看板，查看当日<span class="em">死亡次数 / 观看时长 / 游戏分布</span>，建立健康游戏意识</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== Footer ============== -->
+    <footer>
+      <div class="wrap">
+        <div class="logo">Die<span class="flame">Play</span></div>
+        <div class="meta">DEATH · WATCH · STATS · CREATIVE SUBMISSION 2026</div>
+      </div>
+    </footer>
+
+    <script>
+      // 滚动入场动画
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -80px 0px" }
+      );
+      document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 运行时数据与日志
+backend/data/*.db
+backend/data/*.db-journal
+agent/logs/
+*.log
+agent/.csgo-log-path
+
+# Node
+node_modules/
+frontend/dist/
+
+# 环境变量 / 密钥
+.env
+.env.*
+
+# Trae 记忆（本地私有）
+.trae/memory/
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

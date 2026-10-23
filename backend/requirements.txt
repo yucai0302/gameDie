@@ -1,0 +1,6 @@
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2.5
+python-dateutil>=2.8
+# sqlite-utils 可选，未直接使用，保留以便后续扩展
+sqlite-utils>=3.36
